@@ -13,7 +13,7 @@ from rich import print
 load_dotenv()
 
 tavily=TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
-
+@tool
 def web_search(query:str)->str:
     """
     Search the web for recent and relaible information ona topic.Return Titles,URL ,Snippets and contents
@@ -30,7 +30,7 @@ def web_search(query:str)->str:
 
     return "\n-----\n".join(out)
 
-
+@tool
 def scrape_url(url: str) -> str:
     """
     Scrape and extract clean readable content from a URL.
