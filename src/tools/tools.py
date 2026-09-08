@@ -16,7 +16,7 @@ def web_search(query:str)->str:
     """
     results=tavily.search(query=query,max_results=5)
 
-    print(results)
+    # print(results)
 
     out=[]
     for r in results["results"]:
