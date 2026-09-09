@@ -18,17 +18,18 @@ def web_search(query:str)->str:
     """
     Search the web for recent and relaible information ona topic.Return Titles,URL ,Snippets and contents
     """
-    results=tavily.search(query=query,max_results=5)
+    results=tavily.search(query=query,max_results=4)
 
     # print(results)
 
     out=[]
     for r in results["results"]:
         out.append(
-        f"Title:{r['title']}\nURL:{r['url']}\nSnippet:{r['content'][:300]}\n"
+        f"Title:{r['title']}\nURL:{r['url']}\nSnippet:{r['content'][:200]}\n"
         )
 
-    return "\n-----\n".join(out)
+    # Hard cap so an agent that loops this tool can't blow the token budget.
+    return "\n-----\n".join(out)[:1600]
 
 @tool
 def scrape_url(url: str) -> str:
@@ -68,7 +69,7 @@ def scrape_url(url: str) -> str:
 
         if extracted and len(extracted.strip()) > 200:
             cleaned = re.sub(r'\s+', ' ', extracted)
-            return cleaned[:5000]
+            return cleaned[:2000]
 
 
         doc = Document(html)
@@ -91,7 +92,7 @@ def scrape_url(url: str) -> str:
 
         if text and len(text.strip()) > 200:
             cleaned = re.sub(r'\s+', ' ', text)
-            return cleaned[:5000]
+            return cleaned[:2000]
 
       
         soup = BeautifulSoup(html, "html.parser")
@@ -112,7 +113,7 @@ def scrape_url(url: str) -> str:
         cleaned = re.sub(r'\s+', ' ', text)
 
         if cleaned:
-            return cleaned[:5000]
+            return cleaned[:2000]
 
         return "Could not extract meaningful content from the page."
 
